@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conectar MetaMask y Migrar Contratos</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+  <button id="connectButton">Conectar MetaMask y Migrar</button>
+
+  <script>
+    document.getElementById('connectButton').addEventListener('click', async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const web3 = new Web3(window.ethereum);
+          const accounts = await web3.eth.getAccounts();
+          console.log('Conectado a MetaMask con la cuenta:', accounts[0]);
+
+          // Enviar petición al servidor para ejecutar truffle migrate
+          fetch('/migrate', { method: 'POST' })
+            .then(response => response.text())
+            .then(data => {
+              console.log('Migración completada:', data);
+              alert('Migración completada');
+            })
+            .catch(error => {
+              console.error('Error ejecutando la migración:', error);
+              alert('Error ejecutando la migración');
+            });
+        } catch (error) {
+          console.error('Error conectando a MetaMask:', error);
+          alert('Error conectando a MetaMask');
+        }
+      } else {
+        alert('MetaMask no está instalado');
+      }
+    });
+  </script>
+</body>
+</html>
