@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 var router = express.Router();
 // Endpoint para ejecutar truffle migrate
 router.post('/migrate', (req, res) => {
-  exec('truffle migrate --reset --network ganache', (error, stdout, stderr) => {
+  exec('truffle migrate', (error, stdout, stderr) => {
     if (error) {
       console.error(`Error ejecutando truffle migrate: ${error}`);
       return res.status(500).send(`Error ejecutando truffle migrate: ${stderr}`);
